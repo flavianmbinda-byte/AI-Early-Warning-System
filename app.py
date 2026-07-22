@@ -287,16 +287,34 @@ if weather:
     c1, c2, c3 = st.columns(3)
 
     with c1:
-        st.metric("🌡 Temperature", f"{weather['temperature']:.1f} °C")
-        st.metric("💧 Humidity", f"{weather['humidity']} %")
+        st.metric(
+    T("🌡 Temperature", "🌡 Joto"),
+    f"{weather['temperature']:.1f} °C"
+)
+        st.metric(
+    T("💧 Humidity", "💧 Unyevunyevu"),
+    f"{weather['humidity']} %"
+)
 
     with c2:
-        st.metric("🌧 Rainfall", f"{weather['rainfall']} mm")
-        st.metric("🌬 Wind", f"{weather['wind']} m/s")
+        st.metric(
+    T("🌧 Rainfall", "🌧 Mvua"),
+    f"{weather['rainfall']} mm"
+)
+        st.metric(
+    T("🌬 Wind", "🌬 Upepo"),
+    f"{weather['wind']} m/s"
+)
 
     with c3:
-        st.metric("📈 Pressure", f"{weather['pressure']} hPa")
-        st.metric("🔥 Max Temp", f"{weather['temp_max']} °C")
+        st.metric(
+    T("📈 Pressure", "📈 Shinikizo"),
+    f"{weather['pressure']} hPa"
+)
+        st.metric(
+    T("🔥 Max Temp", "🔥 Joto la Juu"),
+    f"{weather['temp_max']} °C"
+)
 
 else:
 
