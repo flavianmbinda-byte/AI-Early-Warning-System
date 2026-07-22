@@ -155,15 +155,6 @@ def T(en, sw):
 # HEADER
 # =========================
 
-col1, col2, col3 = st.columns([3,1,3])
-
-with col2:
-
-    st.image(
-        "images/logo.png",
-        width=90
-    )
-
 st.markdown(
     f"""
     <h1 style='text-align:center;'>
@@ -195,7 +186,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 # =========================
 # PATHS
 # =========================
