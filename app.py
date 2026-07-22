@@ -1632,26 +1632,6 @@ else:
         """
     ))
 # =========================
-# WEATHER HISTORY
-# =========================
-
-st.subheader("📅 Weather History")
-
-history = pd.read_sql(
-
-    """
-    SELECT *
-    FROM weather_history
-    ORDER BY date DESC
-    """,
-
-    conn
-
-)
-
-st.dataframe(history, use_container_width=True)
-
-# =========================
 # FOOTER
 # =========================
 st.write("---")
