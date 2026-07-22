@@ -203,11 +203,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(BASE_DIR, "data")
 
 climate_files = {
-    "Mbeya": "MBEYA.xlsx",
-    "Kongwa": "KONGWA.xlsx",
-    "Zanzibar": "ZANZIBAR.xlsx"
+    "Mbeya": "mbeya.xlsx",
+    "Kongwa": "kongwa.xlsx",
+    "Zanzibar": "zanzibar.xlsx"
 }
-
 yield_files = {
     "Mbeya": "maize_mbeya.xlsx",
     "Kongwa": "maize_kongwa.xlsx",
@@ -295,6 +294,11 @@ yield_file = os.path.join(
     data_path,
     yield_files[region]
 )
+
+# Debug
+print("Data path:", data_path)
+print("Monthly file:", monthly_file)
+print("Yield file:", yield_file)
 
 # =========================
 # LOAD MONTHLY DATA
