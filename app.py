@@ -218,7 +218,24 @@ rain_path = os.path.join(data_path, "Rainfall.xlsx")
 rh_path   = os.path.join(data_path, "Relative Humidity.xlsx")
 tmax_path = os.path.join(data_path, "Tmax.xlsx")
 tmin_path = os.path.join(data_path, "Tmin.xlsx")
+# =========================
+# CACHE DATA
+# =========================
 
+@st.cache_data
+def load_monthly_data(file):
+    return load_block_data(file)
+
+
+@st.cache_data
+def load_yield_data(file):
+    df = pd.read_excel(file)
+    df.columns = (
+        df.columns
+        .str.upper()
+        .str.strip()
+    )
+    return df
 # =========================
 # REGION
 # =========================
@@ -231,11 +248,34 @@ region = st.selectbox(
 # TEST LIVE WEATHER
 # =========================
 
-weather = get_weather(region)
+try:
+
+    with st.spinner(
+        T(
+            "🌤 Fetching live weather data...",
+            "🌤 Inapakua taarifa za hali ya hewa..."
+        )
+    ):
+        weather = get_weather(region)
+
+except Exception:
+    weather = None
 
 if weather:
 
-    st.success("✅ Live Weather Connected")
+    st.success(
+        T(
+            "✅ Live Weather Connected",
+            "✅ Taarifa za hali ya hewa zimepatikana"
+        )
+    )
+
+    st.caption(
+        T(
+            f"Last updated: {datetime.now().strftime('%d %b %Y %H:%M')}",
+            f"Imesasishwa: {datetime.now().strftime('%d %b %Y %H:%M')}"
+        )
+    )
 
     st.subheader(
         T(
@@ -247,44 +287,25 @@ if weather:
     c1, c2, c3 = st.columns(3)
 
     with c1:
-
-        st.metric(
-            "🌡 Temperature",
-            f"{weather['temperature']:.1f} °C"
-        )
-
-        st.metric(
-            "💧 Humidity",
-            f"{weather['humidity']} %"
-        )
+        st.metric("🌡 Temperature", f"{weather['temperature']:.1f} °C")
+        st.metric("💧 Humidity", f"{weather['humidity']} %")
 
     with c2:
-
-        st.metric(
-            "🌧 Rainfall",
-            f"{weather['rainfall']} mm"
-        )
-
-        st.metric(
-            "🌬 Wind",
-            f"{weather['wind']} m/s"
-        )
+        st.metric("🌧 Rainfall", f"{weather['rainfall']} mm")
+        st.metric("🌬 Wind", f"{weather['wind']} m/s")
 
     with c3:
-
-        st.metric(
-            "📈 Pressure",
-            f"{weather['pressure']} hPa"
-        )
-
-        st.metric(
-            "🔥 Max Temp",
-            f"{weather['temp_max']} °C"
-        )
+        st.metric("📈 Pressure", f"{weather['pressure']} hPa")
+        st.metric("🔥 Max Temp", f"{weather['temp_max']} °C")
 
 else:
 
-    st.error("Weather API failed.")
+    st.error(
+        T(
+            "Weather API failed.",
+            "Imeshindikana kupata taarifa za hali ya hewa."
+        )
+    )
 monthly_file = os.path.join(
     data_path,
     climate_files[region]
@@ -295,16 +316,13 @@ yield_file = os.path.join(
     yield_files[region]
 )
 
-# Debug
-print("Data path:", data_path)
-print("Monthly file:", monthly_file)
-print("Yield file:", yield_file)
+
 
 # =========================
 # LOAD MONTHLY DATA
 # =========================
 
-df_month = load_block_data(monthly_file)
+df_month = load_monthly_data(monthly_file)
 # =========================
 # MONTHLY COMPUTATIONS
 # =========================
@@ -1353,14 +1371,7 @@ st.subheader(T(
 
 if os.path.exists(yield_file):
 
-    yield_df = pd.read_excel(yield_file)
-
-    yield_df.columns = (
-        yield_df.columns
-        .str.upper()
-        .str.strip()
-    )
-
+    yield_df = load_yield_data(yield_file)
 # =========================
 # YEARLY CLIMATE FEATURES
 # =========================
@@ -1375,7 +1386,6 @@ model_df = prepare_annual_features(
 # TRAIN YIELD MODEL
 # =========================
 
-
 model_df = (
     model_df
     .dropna()
@@ -1383,9 +1393,6 @@ model_df = (
 )
 
 features = get_region_features(region)
-# =========================
-# DEBUG (weka hapa)
-# =========================
 
 if region == "Mbeya":
 
@@ -1393,20 +1400,22 @@ if region == "Mbeya":
         model_df,
         features
     )
-models = get_models()
-if region == "Mbeya" and len(model_df) > 8:
 
-    (
-    best_model,
-    best_name,
-    best_r2,
-    best_rmse,
-    best_mae
-) = train_models(
-    models,
-    X,
-    y
-)
+    models = get_models()
+
+    if len(model_df) > 8:
+
+        (
+            best_model,
+            best_name,
+            best_r2,
+            best_rmse,
+            best_mae
+        ) = train_models(
+            models,
+            X,
+            y
+        )
 # =========================
 # TRAIN FINAL MODEL
 # =========================
