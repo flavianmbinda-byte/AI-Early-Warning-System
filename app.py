@@ -1659,11 +1659,59 @@ else:
         """
     ))
 # =========================
-# FOOTER
+# ABOUT THIS SYSTEM
 # =========================
+
 st.write("---")
 
-st.caption(T(
-    "AI Early Warning System – Tanzania 🌽",
-    "Mfumo wa AI wa Tahadhari ya Mapema – Tanzania 🌽"
-))
+st.subheader(
+    T(
+        "ℹ️ About this System",
+        "ℹ️ Kuhusu Mfumo Huu"
+    )
+)
+
+st.info(
+    T(
+        """
+AI Early Warning System is an intelligent decision support platform developed to assist farmers by integrating real-time weather information, climate indicators, machine learning, and Markov forecasting for improved agricultural decision-making in Tanzania.
+
+**Version:** 1.0
+        """,
+        """
+Mfumo wa AI wa Tahadhari ya Mapema ni mfumo mahiri wa kusaidia maamuzi ya kilimo uliotengenezwa kuwasaidia wakulima kwa kuunganisha taarifa za hali ya hewa za wakati halisi, viashiria vya hali ya hewa, ujifunzaji wa mashine (Machine Learning), na utabiri wa Markov ili kuboresha maamuzi ya kilimo nchini Tanzania.
+
+**Toleo:** 1.0
+        """
+    )
+)
+# =========================
+# DISCLAIMER
+# =========================
+
+st.warning(
+    T(
+        """
+**Disclaimer**
+
+This system provides decision-support information to support agricultural planning. It should complement, not replace, recommendations from Agricultural Extension Officers or other qualified agricultural experts.
+        """,
+        """
+**Kanusho**
+
+Mfumo huu unatoa taarifa za kusaidia maamuzi ya kilimo. Unapaswa kutumika kama nyongeza ya ushauri unaotolewa na Maafisa Ugani au wataalamu wengine wa kilimo, na si mbadala wa ushauri wao.
+        """
+    )
+)
+# =========================
+# FOOTER
+# =========================
+
+st.write("---")
+
+st.caption(
+    T(
+        "🌽 AI Early Warning System for Climate-Smart Agriculture in Tanzania | Version 1.0",
+        "🌽 Mfumo wa AI wa Tahadhari ya Mapema kwa Kilimo Himilivu dhidi ya Mabadiliko ya Tabianchi nchini Tanzania | Toleo 1.0"
+    )
+)
