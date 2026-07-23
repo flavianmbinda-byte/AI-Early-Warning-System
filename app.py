@@ -1351,6 +1351,9 @@ with col3:
         ai_image("RAIN", next_rain_m),
         use_container_width=True
     )
+if os.path.exists(yield_file):
+
+    yield_df = load_yield_data(yield_file)
 # =========================
 # YEARLY CLIMATE FEATURES
 # =========================
