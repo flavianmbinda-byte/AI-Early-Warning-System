@@ -1353,7 +1353,13 @@ with col3:
     )
 if os.path.exists(yield_file):
 
-    yield_df = load_yield_data(yield_file)
+    yield_df = pd.read_excel(yield_file)
+
+    yield_df.columns = (
+        yield_df.columns
+        .str.upper()
+        .str.strip()
+    )
 # =========================
 # YEARLY CLIMATE FEATURES
 # =========================
