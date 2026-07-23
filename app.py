@@ -1355,10 +1355,6 @@ with col3:
 # YIELD PREDICTION
 # =========================
 
-st.subheader(T(
-    "🌽 Yield Prediction",
-    "🌽 Utabiri wa Mavuno"
-))
 
 
 if os.path.exists(yield_file):
