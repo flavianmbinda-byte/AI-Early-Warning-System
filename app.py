@@ -1352,149 +1352,44 @@ with col3:
         use_container_width=True
     )
 # =========================
-# YIELD PREDICTION
+# YIELD MODEL (BACKGROUND ONLY)
 # =========================
-
-st.subheader(T(
-    "🌽 Yield Prediction",
-    "🌽 Utabiri wa Mavuno"
-))
-
 
 if os.path.exists(yield_file):
 
-    yield_df = pd.read_excel(yield_file)
+    yield_df = load_yield_data(yield_file)
 
-    yield_df.columns = (
-        yield_df.columns
-        .str.upper()
-        .str.strip()
-    )
+    model_df = prepare_annual_features(df_month, yield_df)
+    model_df = model_df.dropna().reset_index(drop=True)
 
-# =========================
-# YEARLY CLIMATE FEATURES
-# =========================
+    features = get_region_features(region)
 
-model_df = prepare_annual_features(
-    df_month,
-    yield_df
-)
+    if region == "Mbeya":
+        X, y = prepare_training_data(model_df, features)
 
+        if len(model_df) > 8:
+            models = get_models()
+            best_model, best_name, best_r2, best_rmse, best_mae = train_models(models, X, y)
 
-# =========================
-# TRAIN YIELD MODEL
-# =========================
+            tmean = (weather["temp_max"] + weather["temp_min"]) / 2
+            faw_score = {"Low":0,"Medium":1,"High":2}[df_daily.iloc[0]["FAW"]]
 
-model_df = (
-    model_df
-    .dropna()
-    .reset_index(drop=True)
-)
+            latest_data = pd.DataFrame({
+                "TMEAN":[tmean],
+                "RAINFALL_SUM":[weather["rainfall"]],
+                "SEASON_RAIN":[model_df.iloc[-1]["SEASON_RAIN"]],
+                "SEASONAL_RAIN":[model_df.iloc[-1]["SEASONAL_RAIN"]],
+                "RAIN_ANOMALY":[weather["rainfall"]-model_df["RAINFALL_SUM"].mean()],
+                "VPD":[df_daily.iloc[0]["VPD"]],
+                "FAW_SCORE":[faw_score],
+                "YIELD_LAG1":[model_df.iloc[-1]["YIELD"]],
+                "RAIN_LAG1":[model_df.iloc[-1]["RAINFALL_SUM"]],
+                "VPD_LAG1":[model_df.iloc[-1]["VPD"]]
+            })
 
-features = get_region_features(region)
-
-if region == "Mbeya":
-
-    X, y = prepare_training_data(
-        model_df,
-        features
-    )
-
-    models = get_models()
-
-    if len(model_df) > 8:
-
-        (
-            best_model,
-            best_name,
-            best_r2,
-            best_rmse,
-            best_mae
-        ) = train_models(
-            models,
-            X,
-            y
-        )
-# =========================
-# TRAIN FINAL MODEL
-# =========================
-
-if region == "Mbeya":
-
-    tmean = (weather["temp_max"] + weather["temp_min"]) / 2
-
-    faw_score = {
-        "Low": 0,
-        "Medium": 1,
-        "High": 2
-    }[df_daily.iloc[0]["FAW"]]
-
-    latest_data = pd.DataFrame({
-        "TMEAN": [tmean],
-        "RAINFALL_SUM": [weather["rainfall"]],
-        "SEASON_RAIN": [model_df.iloc[-1]["SEASON_RAIN"]],
-        "SEASONAL_RAIN": [model_df.iloc[-1]["SEASONAL_RAIN"]],
-        "RAIN_ANOMALY": [
-            weather["rainfall"] - model_df["RAINFALL_SUM"].mean()
-        ],
-        "VPD": [df_daily.iloc[0]["VPD"]],
-        "FAW_SCORE": [faw_score],
-        "YIELD_LAG1": [model_df.iloc[-1]["YIELD"]],
-        "RAIN_LAG1": [model_df.iloc[-1]["RAINFALL_SUM"]],
-        "VPD_LAG1": [model_df.iloc[-1]["VPD"]]
-    })
-
-    latest_data = latest_data[features]
-
-    prediction = predict_yield(
-        best_model,
-        X,
-        y,
-        latest_data
-    )
-
-    historical_average = yield_df["YIELD"].mean()
-
-    # hapa inaendelea code yako yote ya
-    # Yield Forecast
-    # st.metric(...)
-    # st.success(...)
-    # st.warning(...)
-else:
-
-    st.subheader(
-        T(
-            "🌱 AI Climate Advisory",
-            "🌱 Ushauri wa AI wa Hali ya Hewa"
-        )
-    )
-
-    if health["overall"] >= 80:
-
-        st.success(
-            T(
-                "✅ Weather conditions are favourable. Planting can begin after effective rainfall.",
-                "✅ Hali ya hewa ni nzuri. Panda baada ya mvua za kutosha kuanza."
-            )
-        )
-
-    elif health["overall"] >= 60:
-
-        st.info(
-            T(
-                "ℹ Moderate weather conditions. Continue monitoring rainfall before planting.",
-                "ℹ Hali ya hewa ni ya wastani. Endelea kufuatilia mvua kabla ya kupanda."
-            )
-        )
-
-    else:
-
-        st.warning(
-            T(
-                "⚠ Weather conditions are currently not favourable. Delay planting and continue monitoring.",
-                "⚠ Hali ya hewa bado si nzuri kwa kupanda. Endelea kufuatilia taarifa za hali ya hewa."
-            )
-        )
+            latest_data = latest_data[features]
+            prediction = predict_yield(best_model, X, y, latest_data)
+            historical_average = yield_df["YIELD"].mean()
 
 # =========================
 # AI SMART RECOMMENDATIONS
