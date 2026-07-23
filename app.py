@@ -253,13 +253,6 @@ except Exception:
 
 if weather:
 
-    st.success(
-        T(
-            "✅ Live Weather Connected",
-            "✅ Taarifa za hali ya hewa zimepatikana"
-        )
-    )
-
     st.caption(
         T(
             f"Last updated: {datetime.now().strftime('%d %b %Y %H:%M')}",
@@ -274,37 +267,30 @@ if weather:
         )
     )
 
-    c1, c2, c3 = st.columns(3)
+    # Two columns only
+    c1, c2 = st.columns(2)
 
     with c1:
         st.metric(
-    T("🌡 Temperature", "🌡 Joto"),
-    f"{weather['temperature']:.1f} °C"
-)
+            T("🌡 Temperature", "🌡 Joto"),
+            f"{weather['temperature']:.1f} °C"
+        )
+
         st.metric(
-    T("💧 Humidity", "💧 Unyevunyevu"),
-    f"{weather['humidity']} %"
-)
+            T("💧 Humidity", "💧 Unyevunyevu"),
+            f"{weather['humidity']} %"
+        )
 
     with c2:
         st.metric(
-    T("🌧 Rainfall", "🌧 Mvua"),
-    f"{weather['rainfall']} mm"
-)
-        st.metric(
-    T("🌬 Wind", "🌬 Upepo"),
-    f"{weather['wind']} m/s"
-)
+            T("🌧 Rainfall", "🌧 Mvua"),
+            f"{weather['rainfall']} mm"
+        )
 
-    with c3:
         st.metric(
-    T("📈 Pressure", "📈 Shinikizo"),
-    f"{weather['pressure']} hPa"
-)
-        st.metric(
-    T("🔥 Max Temp", "🔥 Joto la Juu"),
-    f"{weather['temp_max']} °C"
-)
+            T("🔥 Max Temp", "🔥 Joto la Juu"),
+            f"{weather['temp_max']} °C"
+        )
 
 else:
 
@@ -314,6 +300,7 @@ else:
             "Imeshindikana kupata taarifa za hali ya hewa."
         )
     )
+
 monthly_file = os.path.join(
     data_path,
     climate_files[region]
@@ -323,7 +310,6 @@ yield_file = os.path.join(
     data_path,
     yield_files[region]
 )
-
 
 
 # =========================
@@ -432,8 +418,6 @@ adjustment = climate_adjustment(
     df_daily.iloc[0]["VPD"]
 )
 
-st.info(f"🌦️ Climate Adjustment Score: {adjustment}")
-
 # =========================
 # MONTHLY RAIN FORECAST
 # =========================
@@ -501,8 +485,8 @@ save_weather(
 st.subheader(
 
     T(
-        "🧠 AI Crop Health Assessment",
-        "🧠 Tathmini ya AI ya Afya ya Mazao"
+        "🧠 Crop Health Assessment",
+        "🧠 Tathmini ya Afya ya Mazao"
     )
 
 )
@@ -876,8 +860,8 @@ else:
 
 st.subheader(
     T(
-        "🌱 AI Planting Advisory",
-        "🌱 Ushauri wa AI kuhusu Upandaji"
+        "🌱 Planting Advisory",
+        "🌱 Ushauri kuhusu Upandaji"
     )
 )
 
@@ -894,8 +878,8 @@ if not in_season:
             
             f"Msimu wa {season_name} bado haujaanza.\n\n"
             f"🌧 Mvua zinatarajiwa kuanza mwezi wa {start}.\n"
-            f"⏳ Zimebaki takribani mwezi {months_remaining}.\n\n"
-            "Ushauri: Endelea kuandaa shamba, pata mbegu na fuatilia taarifa za hali ya hewa."
+            f"⏳ Imebaki takribani miezi {months_remaining}.\n\n"
+            "Ushauri: Endelea kuandaa shamba, andaa mbegu na fuatilia taarifa za hali ya hewa."
         )
     )
 
@@ -913,7 +897,7 @@ else:
             "Ushauri:\n"
             "• Panda ikiwa mvua za kutosha zimepatikana.\n"
             "• Endelea kufuatilia taarifa za hali ya hewa kila siku.\n"
-            "• Endelea kufuatilia hatari ya Fall Armyworm."
+            "• Endelea kufuatilia hatari ya Wadudu."
         )
     )
 # Default values
