@@ -1351,6 +1351,16 @@ with col3:
         ai_image("RAIN", next_rain_m),
         use_container_width=True
     )
+# =========================
+# YIELD PREDICTION
+# =========================
+
+st.subheader(T(
+    "🌽 Yield Prediction",
+    "🌽 Utabiri wa Mavuno"
+))
+
+
 if os.path.exists(yield_file):
 
     yield_df = pd.read_excel(yield_file)
@@ -1360,6 +1370,7 @@ if os.path.exists(yield_file):
         .str.upper()
         .str.strip()
     )
+
 # =========================
 # YEARLY CLIMATE FEATURES
 # =========================
