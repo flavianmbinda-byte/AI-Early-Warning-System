@@ -1352,15 +1352,6 @@ with col3:
         use_container_width=True
     )
 # =========================
-# YIELD PREDICTION
-# =========================
-
-
-
-if os.path.exists(yield_file):
-
-    yield_df = load_yield_data(yield_file)
-# =========================
 # YEARLY CLIMATE FEATURES
 # =========================
 
