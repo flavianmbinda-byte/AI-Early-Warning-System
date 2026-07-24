@@ -523,8 +523,8 @@ with c2:
 
     st.metric(
         T(
-            "🐛 FAW Status",
-            "🐛 Hali ya FAW"
+            "🐛 FAW Safety",
+            "🐛 Usalama dhidi ya wadudu (FAW)"
         ),
         f"{health['faw']}%"
     )
