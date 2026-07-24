@@ -71,9 +71,10 @@ def calculate_crop_health(weather, vpd, faw):
 
     rainfall = weather["rainfall"]
 
-    if rainfall >= 5:
+    # Daily rainfall suitability for maize
+    if rainfall >= 15:
         rain_score = 100
-    elif rainfall >= 2:
+    elif rainfall >= 5:
         rain_score = 75
     elif rainfall > 0:
         rain_score = 50
@@ -82,18 +83,22 @@ def calculate_crop_health(weather, vpd, faw):
 
     temp = weather["temperature"]
 
-    if 20 <= temp <= 30:
+    # Temperature suitability for maize
+    if 22 <= temp <= 30:
         temp_score = 100
-    elif 15 <= temp < 20 or 30 < temp <= 35:
-        temp_score = 70
+    elif 18 <= temp < 22 or 30 < temp <= 34:
+        temp_score = 75
+    elif 15 <= temp < 18 or 34 < temp <= 36:
+        temp_score = 50
     else:
-        temp_score = 40
+        temp_score = 25
 
-    if vpd < 0.8:
+    # Water status using VPD
+    if 0.8 <= vpd <= 1.2:
         water_score = 100
-    elif vpd < 1.2:
+    elif 0.5 <= vpd < 0.8 or 1.2 < vpd <= 1.6:
         water_score = 75
-    elif vpd < 1.6:
+    elif 0.3 <= vpd < 0.5 or 1.6 < vpd <= 2.0:
         water_score = 50
     else:
         water_score = 25
@@ -105,9 +110,7 @@ def calculate_crop_health(weather, vpd, faw):
     else:
         faw_score = 30
 
-    overall = round(
-        (rain_score + temp_score + water_score + faw_score) / 4
-    )
+    overall = round((rain_score + temp_score + water_score + faw_score) / 4)
 
     return {
         "rain": rain_score,
@@ -116,7 +119,6 @@ def calculate_crop_health(weather, vpd, faw):
         "faw": faw_score,
         "overall": overall
     }
-
 
 # =========================
 # CLIMATE ADJUSTMENT
